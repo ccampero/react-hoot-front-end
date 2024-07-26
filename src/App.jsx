@@ -1,5 +1,5 @@
 import { useState, createContext, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import NavBar from './components/NavBar/NavBar';
 import Landing from './components/Landing/Landing';
 import Dashboard from './components/Dashboard/Dashboard';
@@ -9,6 +9,7 @@ import * as authService from '../src/services/authService'; // import the authse
 import HootList from './components/HootList/HootList';
 import * as hootService from './services/hootService';
 import HootDetails from './components/HootDetails/HootDetails';
+import HootForm from './components/HootForm/HootForm';
 
 
 
@@ -32,6 +33,16 @@ const App = () => {
     if (user) fetchAllHoots();
   }, [user]);
 
+  const navigate = useNavigate();
+  const handleAddHoot = async (hootFormData) => {
+    const newHoot = await hootService.create(hootFormData);
+    setHoots([newHoot, ...hoots]);
+    navigate('/hoots');
+  };
+  
+  
+
+
   return (
     <>
       <AuthedUserContext.Provider value={user}>
@@ -43,6 +54,7 @@ const App = () => {
       <Route path="/" element={<Dashboard user={user} />} />
       <Route path="/hoots" element={<HootList hoots={hoots}/>} />
       <Route path="/hoots/:hootId" element={<HootDetails />} />
+      <Route path="/hoots/new" element={<HootForm handleAddHoot={handleAddHoot} />} />
     </>
   ) : (
     // Public Route:
