@@ -3,8 +3,7 @@ import { useParams } from 'react-router-dom';
 
 const HootList = (props) => {
 
-    const { hootId } = useParams();
-console.log('hootId', hootId);
+    
 
     return (
         <main>
